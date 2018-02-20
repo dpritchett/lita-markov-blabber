@@ -1,31 +1,31 @@
-require 'marky_markov'
+require 'lita/markov_brain'
 
 module Lita
   module Handlers
     class MarkovBlabber < Handler
-      # insert handler code here
-      #
+
+      on :loaded, :on_loaded
       on :unhandled_message, :blabber
 
-      def self.load_dictionaries
-        markov = ::MarkyMarkov::TemporaryDictionary.new
+      def on_loaded(payload)
+        brain.load_dictionaries
+      end
 
-        dicts_path = File.join __dir__, '..', '..', '..', 'dict', '*'
-        files = Dir[dicts_path]
-
-        files.each { |file| markov.parse_file file }
-
-        @@brain = markov
+      def brain
+        self.class.brain
       end
 
       def blabber(payload)
         n = rand(5..20)
-        gibberish = @@brain.generate_n_words n
+        gibberish = brain.generate_n_words n
 
-        payload[:message].reply gibberish
+        payload.fetch(:message).reply gibberish
       end
 
-      load_dictionaries
+      # Save a class-wide
+      def self.brain
+        @brain ||= Lita::MarkovBrain.new
+      end
 
       Lita.register_handler(self)
     end
