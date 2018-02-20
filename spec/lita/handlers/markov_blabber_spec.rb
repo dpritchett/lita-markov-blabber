@@ -1,15 +1,20 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe Lita::Handlers::MarkovBlabber, lita_handler: true do
+  let(:test_inputs_path) { File.join(__dir__, '..', '..', 'dict') }
+
   let(:robot) { Lita::Robot.new(registry) }
+
+  before do
+    robot.config.handlers.markov_blabber.markov_inputs_path = test_inputs_path
+  end
 
   subject { described_class.new(robot) }
 
-  describe ':blabber' do
+  describe ':gibberish' do
     it 'responds with a caption and an image URL' do
-      send_message "this isn't matched"
-      response = replies.last
-      word_count = response.split.count
+      result = subject.gibberish
+      word_count = result.split.count
       expect(word_count > 4).to be_truthy
       expect(word_count < 30).to be_truthy
     end

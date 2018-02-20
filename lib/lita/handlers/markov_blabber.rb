@@ -3,28 +3,24 @@ require 'lita/markov_brain'
 module Lita
   module Handlers
     class MarkovBlabber < Handler
+      DEFAULT_INPUTS_PATH = File.join __dir__, '..', '..', '..', 'dict'
 
-      on :loaded, :on_loaded
+      config :markov_inputs_path, default: DEFAULT_INPUTS_PATH
+
       on :unhandled_message, :blabber
 
-      def on_loaded(payload)
-        brain.load_dictionaries
-      end
-
-      def brain
-        self.class.brain
-      end
-
       def blabber(payload)
-        n = rand(5..20)
-        gibberish = brain.generate_n_words n
-
         payload.fetch(:message).reply gibberish
       end
 
-      # Save a class-wide
-      def self.brain
-        @brain ||= Lita::MarkovBrain.new
+      def gibberish
+        n = rand(5..20)
+        gibberish = brain.generate_n_words n
+      end
+
+      def brain
+        inputs_path = config.markov_inputs_path
+        @brain ||= Lita::MarkovBrain.new(inputs_path: inputs_path)
       end
 
       Lita.register_handler(self)
