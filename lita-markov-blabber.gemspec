@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = "lita-markov-blabber"
-  spec.version       = "0.1.0"
+  spec.version       = "0.2.0"
   spec.authors       = ["Daniel J. Pritchett"]
   spec.email         = ["dpritchett@gmail.com"]
   spec.description   = "Nonsensical nearly-human fallback responses for your lita bot"
