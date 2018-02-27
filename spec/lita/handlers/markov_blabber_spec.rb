@@ -12,13 +12,20 @@ describe Lita::Handlers::MarkovBlabber, lita_handler: true do
   subject { described_class.new(robot) }
 
   describe ':gibberish' do
-    it 'responds with a caption and an image URL' do
+    it 'generates lots of words' do
       result = subject.gibberish
       word_count = result.split.count
       expect(word_count > 4).to be_truthy
       expect(word_count < 30).to be_truthy
     end
+  end
 
+  describe 'preload_brain' do
+    it "fills the brain's dictionary with words" do
+    end
+  end
+
+  describe 'blabber' do
     it 'answers arbitrary inputs' do
       lyrics = ['welcome to the jungle',
                 'take me down to the paradise city',
