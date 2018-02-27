@@ -9,7 +9,7 @@ module Lita
       config :markov_inputs_path, default: DEFAULT_INPUTS_PATH
 
       on :unhandled_message, :blabber
-      on :loaded, :on_loaded
+      on :loaded, :preload_brain
 
       def blabber(payload)
         payload.fetch(:message).reply gibberish
@@ -24,8 +24,8 @@ module Lita
         self.class.brain(config.markov_inputs_path)
       end
 
-      def on_loaded(_payload)
-        brain.load_brain!
+      def preload_brain(_payload)
+        brain
       end
 
       def self.brain(inputs_path)
