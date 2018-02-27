@@ -1,4 +1,5 @@
 require 'lita/markov_brain'
+require 'pry'
 
 module Lita
   module Handlers
@@ -8,6 +9,7 @@ module Lita
       config :markov_inputs_path, default: DEFAULT_INPUTS_PATH
 
       on :unhandled_message, :blabber
+      on :loaded, :on_loaded
 
       def blabber(payload)
         payload.fetch(:message).reply gibberish
@@ -19,7 +21,14 @@ module Lita
       end
 
       def brain
-        inputs_path = config.markov_inputs_path
+        self.class.brain(config.markov_inputs_path)
+      end
+
+      def on_loaded(_payload)
+        brain.load_brain!
+      end
+
+      def self.brain(inputs_path)
         @brain ||= Lita::MarkovBrain.new(inputs_path: inputs_path)
       end
 
