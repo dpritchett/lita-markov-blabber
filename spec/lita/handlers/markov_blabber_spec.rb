@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe Lita::Handlers::MarkovBlabber, lita_handler: true do
+  # START:setup
+
+  # e.g. lita-markov-blabber/spec/dict/moby-dick-sample.txt
   let(:test_inputs_path) { File.join(__dir__, '..', '..', 'dict') }
 
   let(:robot) { Lita::Robot.new(registry) }
@@ -10,18 +13,15 @@ describe Lita::Handlers::MarkovBlabber, lita_handler: true do
   end
 
   subject { described_class.new(robot) }
+  # END:setup
 
+  # START:tests
   describe ':gibberish' do
     it 'generates lots of words' do
       result = subject.gibberish
       word_count = result.split.count
       expect(word_count > 4).to be_truthy
       expect(word_count < 30).to be_truthy
-    end
-  end
-
-  describe 'preload_brain' do
-    it "fills the brain's dictionary with words" do
     end
   end
 
@@ -41,4 +41,5 @@ describe Lita::Handlers::MarkovBlabber, lita_handler: true do
       end
     end
   end
+  # END:tests
 end
